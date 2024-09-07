@@ -1,5 +1,6 @@
+import { Type } from 'class-transformer';
 import {
-  IsDateString,
+  IsDate,
   IsInt,
   IsNotEmpty,
   IsNumber,
@@ -33,7 +34,8 @@ export class CreateProductDto {
   @IsNotEmpty()
   quantity: number;
 
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   @IsNotEmpty()
-  expiry_date: string;
+  expiry_date: Date;
 }
