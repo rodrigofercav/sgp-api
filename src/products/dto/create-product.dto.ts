@@ -1,34 +1,41 @@
+import { Type } from 'class-transformer';
 import {
-    IsBoolean,
-    IsDateString,
-    IsInt,
-    IsNotEmpty,
-    IsNumber,
-    IsPositive,
-    IsString,
-    Min
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Matches,
+  Min,
 } from 'class-validator';
 
 export class CreateProductDto {
-    @IsNotEmpty()
-    @IsString()
-    name: string;
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^\S.*\S$/, {
+    message: 'name should not contain only white spaces',
+  })
+  name: string;
 
-    @IsNotEmpty()
-    @IsString()
-    description: string;
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^\S.*\S$/, {
+    message: 'description should not contain only white spaces',
+  })
+  description: string;
 
-    @Min(0.01)
-    @IsNumber({maxDecimalPlaces: 2})
-    price: number;
+  @Min(0.01)
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @IsNotEmpty()
+  price: number;
 
-    @IsInt()
-    @IsPositive()
-    quantity: number;
+  @IsInt()
+  @Min(0)
+  @IsNotEmpty()
+  quantity: number;
 
-    @IsDateString()
-    expiry_date: string;
-
-    @IsBoolean()
-    status: boolean;
+  @IsDate()
+  @Type(() => Date)
+  @IsNotEmpty()
+  expiry_date: Date;
 }
