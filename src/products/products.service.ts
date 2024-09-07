@@ -27,7 +27,10 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     await this.checkIfProductNameExists(createProductDto.name);
-    const product = this.productRepository.create(createProductDto);
+    const product = this.productRepository.create({
+      ...createProductDto,
+      status: true, // Default status is true
+    });
     return this.productRepository.save(product);
   }
 
