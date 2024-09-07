@@ -27,6 +27,8 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     await this.checkIfProductNameExists(createProductDto.name);
+    this.validateExpiryDate(createProductDto.expiry_date);
+
     const product = this.productRepository.create({
       ...createProductDto,
       status: true, // Default status is true
@@ -40,6 +42,8 @@ export class ProductsService {
   ): Promise<Product> {
     await this.checksIfProductIdExists(id);
     await this.checkIfProductNameExists(updateProductDto.name, id);
+    this.validateExpiryDate(updateProductDto.expiry_date);
+
     await this.productRepository.update(id, updateProductDto);
     return this.productRepository.findOne({ where: { id } });
   }
@@ -98,5 +102,22 @@ export class ProductsService {
     }
 
     return existingProductById;
+  }
+
+  /**
+   * Validates the expiry date of a product.
+   *
+   * @param expiryDate - Product expiry date to be validated.
+   * @throws ConflictException - If the expiry date is before the current date.
+   */
+  private validateExpiryDate(expiryDate: Date): void {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    if (expiryDate < currentDate) {
+      throw new ConflictException(
+        "Expiry date must be at least one day after today; you shouldn't add a product that has already expired.",
+      );
+    }
   }
 }
