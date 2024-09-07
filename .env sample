@@ -1,0 +1,12 @@
+## Environment variables
+## This is a sample file, you need to rename this file to .env and fill the variables with your own values
+
+## App variables
+APP_PORT=3000
+
+## Database variables
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=database_name
+DB_USER=user
+DB_PASS=password
