@@ -11,7 +11,7 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 100, unique: true })
   name: string;
 
   @Column({ type: 'text' })
@@ -26,8 +26,8 @@ export class Product {
   @Column({ type: 'date' })
   expiry_date: Date;
 
-  @Column({ type: 'boolean' })
-  status: boolean;
+  @Column({ type: 'varchar', length: 10 })
+  status: string;
 
   @CreateDateColumn({ type: 'datetime' })
   created_at: Date;

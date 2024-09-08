@@ -31,7 +31,7 @@ export class ProductsService {
 
     const product = this.productRepository.create({
       ...createProductDto,
-      status: true, // Default status is true
+      status: 'active', // Default status is 'active'
     });
     return this.productRepository.save(product);
   }
