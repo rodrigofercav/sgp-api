@@ -7,20 +7,59 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
   Put,
 } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  // Create
+  @ApiOperation({ summary: 'Create a product' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Product created successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Data validation failed.',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Business rule validation failed.',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string',
+          example: 'A 250g jar of pure, raw honey, harvested from wildflowers.',
+        },
+        price: { type: 'number', example: 31.99 },
+        quantity: { type: 'integer', example: 10 },
+        expirationDate: { type: 'string', example: '2035-12-31' },
+        status: { type: 'string', example: 'active' },
+      },
+      required: [
+        'description',
+        'price',
+        'quantity',
+        'expirationDate',
+        'status',
+      ],
+    },
+  })
   @Post()
   async create(@Body() createProductDto: CreateProductDto): Promise<Product> {
     try {
@@ -33,16 +72,72 @@ export class ProductsController {
     }
   }
 
+  // Get all products
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'List of products returned successfully',
+  })
   @Get()
   findAll() {
     return this.productsService.findAll();
   }
 
+  // Get one product by ID
+  @ApiOperation({ summary: 'Get a product by ID' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product returned successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Business rule validation failed (Product ID not found).',
+  })
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.productsService.findOne(id);
   }
 
+  // Update
+  @ApiOperation({ summary: 'Update a product by ID' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Product successfully updated',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Product ID not found',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Data validation failed.',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Business rule validation failed.',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        description: {
+          type: 'string',
+          example: 'A 250g jar of pure, raw honey, harvested from wildflowers.',
+        },
+        price: { type: 'number', example: 31.99 },
+        quantity: { type: 'integer', example: 10 },
+        expirationDate: { type: 'string', example: '2035-12-31' },
+        status: { type: 'string', example: 'active' },
+      },
+      required: [
+        'description',
+        'price',
+        'quantity',
+        'expirationDate',
+        'status',
+      ],
+    },
+  })
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -61,6 +156,16 @@ export class ProductsController {
     }
   }
 
+  // Delete
+  @ApiOperation({ summary: 'Delete a product by ID' })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Product successfully deleted',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Product ID not found',
+  })
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
     return this.productsService.remove(id);
