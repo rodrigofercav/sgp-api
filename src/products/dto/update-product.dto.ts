@@ -1,9 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 import { CreateProductDto } from './create-product.dto';
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {
-  @IsBoolean()
+  @IsString()
+  @IsIn(['active', 'inactive'])
   @IsNotEmpty()
-  status: boolean;
+  status: string;
 }
