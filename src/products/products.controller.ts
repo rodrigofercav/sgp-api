@@ -42,20 +42,21 @@ export class ProductsController {
     schema: {
       type: 'object',
       properties: {
+        name: { type: 'string', example: 'Wildflower Honey' },
         description: {
           type: 'string',
           example: 'A 250g jar of pure, raw honey, harvested from wildflowers.',
         },
         price: { type: 'number', example: 31.99 },
         quantity: { type: 'integer', example: 10 },
-        expirationDate: { type: 'string', example: '2035-12-31' },
-        status: { type: 'string', example: 'active' },
+        expiry_date: { type: 'string', example: '2035-12-31' },
       },
       required: [
+        'name',
         'description',
         'price',
         'quantity',
-        'expirationDate',
+        'expiry_date',
         'status',
       ],
     },
@@ -120,20 +121,22 @@ export class ProductsController {
     schema: {
       type: 'object',
       properties: {
+        name: { type: 'string', example: 'Wildflower Honey' },
         description: {
           type: 'string',
           example: 'A 250g jar of pure, raw honey, harvested from wildflowers.',
         },
         price: { type: 'number', example: 31.99 },
         quantity: { type: 'integer', example: 10 },
-        expirationDate: { type: 'string', example: '2035-12-31' },
-        status: { type: 'string', example: 'active' },
+        expiry_date: { type: 'string', example: '2035-12-31' },
+        status: { type: 'string', example: 'inactive' },
       },
       required: [
+        'name',
         'description',
         'price',
         'quantity',
-        'expirationDate',
+        'expiry_date',
         'status',
       ],
     },
