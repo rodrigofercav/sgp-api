@@ -18,6 +18,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
+import { ParseIntCustomMsgPipe } from 'src/pipes/parse-int-custom-msg.pipe';
 
 @ApiTags('products')
 @Controller('products')
@@ -143,7 +144,8 @@ export class ProductsController {
   })
   @Put(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', new ParseIntCustomMsgPipe('id parameter in update'))
+    id: number,
     @Body() updateProductDto: UpdateProductDto,
   ): Promise<Product> {
     try {
@@ -170,7 +172,10 @@ export class ProductsController {
     description: 'Product ID not found',
   })
   @Delete(':id')
-  async remove(@Param('id') id: number): Promise<void> {
+  async remove(
+    @Param('id', new ParseIntCustomMsgPipe('id parameter in delete'))
+    id: number,
+  ): Promise<void> {
     return this.productsService.remove(id);
   }
 }
